@@ -158,13 +158,16 @@ body{font-family:"Noto Sans SC","Inter",-apple-system,BlinkMacSystemFont,"Segoe 
 .day.active .day-head{box-shadow:0 6px 22px rgba(16,24,40,.06)}
 .menu-btn{display:none;position:fixed;top:14px;left:14px;z-index:65;width:44px;height:44px;border:none;border-radius:12px;background:rgba(15,23,42,.86);color:#fff;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(15,23,42,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .menu-btn svg{width:22px;height:22px;stroke:#fff;stroke-width:2.2;fill:none;stroke-linecap:round}
+.sb-close{display:none;position:absolute;top:12px;right:12px;z-index:3;width:40px;height:40px;border:none;border-radius:11px;background:rgba(255,255,255,.1);color:#e8edf5;font-size:26px;line-height:1;cursor:pointer;align-items:center;justify-content:center;transition:background .2s,transform .2s}
+.sb-close:hover{background:rgba(255,255,255,.24);transform:rotate(90deg)}
 .sb-backdrop{display:none;position:fixed;inset:0;background:rgba(2,6,23,.45);z-index:55;opacity:0;visibility:hidden;transition:opacity .3s var(--ease),visibility .3s var(--ease)}
 @media print{.sidebar,.scroll-top{display:none}.main{margin-left:0}.hero{padding:30px}.reader{padding:20px}}
 @media(max-width:920px){
-  .sidebar{display:block;position:fixed;top:0;left:0;bottom:0;width:86%;max-width:340px;transform:translateX(-100%);transition:transform .36s var(--ease);z-index:60;box-shadow:8px 0 40px rgba(2,6,23,.4)}
+  .sidebar{display:block;position:fixed;top:0;left:0;bottom:0;width:80%;max-width:330px;transform:translateX(-100%);transition:transform .36s var(--ease);z-index:60;box-shadow:8px 0 40px rgba(2,6,23,.4)}
   .sidebar.open{transform:translateX(0)}
   .sidebar.open+.sb-backdrop{opacity:1;visibility:visible}
   .menu-btn{display:flex}
+  .sb-close{display:flex}
   .sb-backdrop{display:block}
   .main{margin-left:0}
   .reader{padding:24px 16px}
@@ -249,6 +252,7 @@ body.sr-active .sr-panel{display:block;animation:srPanelIn .44s var(--ease) both
 <body>
 <div class="progress" id="progress"></div>
 <nav class="sidebar">
+  <button class="sb-close" id="sbClose" type="button" aria-label="关闭导航">&times;</button>
   <div class="brand"><div class="logo">Mark的内参</div><div class="sub"><span class="quote-slot" id="qSide" data-quote></span></div><div data-quote-rule></div></div>
   <div class="search-box" id="srBox">
     <svg class="sr-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
@@ -10078,6 +10082,8 @@ document.addEventListener('click', e => {
   function toggleDrawer(){ sidebar.classList.contains('open') ? closeDrawer() : openDrawer(); }
   if(menuBtn) menuBtn.addEventListener('click', toggleDrawer);
   if(sbBackdrop) sbBackdrop.addEventListener('click', closeDrawer);
+  const sbClose = document.getElementById('sbClose');
+  if(sbClose) sbClose.addEventListener('click', closeDrawer);
   // 选中日期后（移动端）自动收起抽屉
   document.querySelectorAll('.toc-list a').forEach(a=>{
     a.addEventListener('click', ()=>{ if(window.innerWidth<=920) closeDrawer(); });
