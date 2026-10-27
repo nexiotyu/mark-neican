@@ -10080,17 +10080,19 @@ document.addEventListener('click', e => {
   function openDrawer(){ sidebar.classList.add('open'); document.body.style.overflow='hidden'; }
   function closeDrawer(){ sidebar.classList.remove('open'); document.body.style.overflow=''; }
   function toggleDrawer(){ sidebar.classList.contains('open') ? closeDrawer() : openDrawer(); }
-  if(menuBtn) menuBtn.addEventListener('click', toggleDrawer);
+  if(menuBtn) menuBtn.addEventListener('click', function(e){ e.stopPropagation(); toggleDrawer(); });
   if(sbBackdrop) sbBackdrop.addEventListener('click', closeDrawer);
   const sbClose = document.getElementById('sbClose');
-  if(sbClose) sbClose.addEventListener('click', closeDrawer);
+  if(sbClose) sbClose.addEventListener('click', function(e){ e.stopPropagation(); closeDrawer(); });
+  // 兜底关闭：抽屉打开时，点侧栏【以外】的任何区域都收起（不依赖遮罩是否接到点击）
+  document.addEventListener('click', function(e){
+    if(!sidebar.classList.contains('open')) return;
+    if(e.target.closest && (e.target.closest('.sidebar') || e.target.closest('#menuBtn'))) return;
+    closeDrawer();
+  });
   // 选中日期后（移动端）自动收起抽屉
   document.querySelectorAll('.toc-list a').forEach(a=>{
     a.addEventListener('click', ()=>{ if(window.innerWidth<=920) closeDrawer(); });
-  });
-  // 搜索结果跳转也收起抽屉（搜索面板在正文区）
-  document.addEventListener('click', e=>{
-    if(e.target.closest && e.target.closest('.sr-item')){ if(window.innerWidth<=920) closeDrawer(); }
   });
   // Esc 关闭
   document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(); });
